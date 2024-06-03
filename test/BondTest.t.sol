@@ -354,8 +354,8 @@ contract BondTest is Test {
         vm.stopPrank();
 
         assertEq(address(bond).balance, 0 ether);
-        assertEq(address(ZERO_ADDRESS).balance, BOND_PRICE); // 0 == 1 - 1
-        assertEq(activeBondsAfter, activeBondsBefore - 1);
+        assertEq(address(ZERO_ADDRESS).balance, BOND_PRICE);
+        assertEq(activeBondsAfter, activeBondsBefore - 1); // 0 == 1 - 1
         assertFalse(bond.userHasBond(USER_ONE));
     }
 
