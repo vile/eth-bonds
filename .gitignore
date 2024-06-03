@@ -12,3 +12,8 @@ docs/
 
 # Dotenv file
 .env
+
+coverage-report/
+aderyn-report.md
+lcov.info
+slither.txt
