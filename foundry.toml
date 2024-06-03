@@ -2,5 +2,13 @@
 src = "src"
 out = "out"
 libs = ["lib"]
+ffi = false
+optimizer = true
+optimizer-runs = 10_000
+
+remappings = ["@solady/=lib/solady/src/"]
+
+[fuzz]
+runs = 6_969
 
 # See more config options https://github.com/foundry-rs/foundry/blob/master/crates/config/README.md#all-options
