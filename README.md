@@ -65,4 +65,35 @@ forge test --mt test_name -vvvvv
 
 ### Deploying
 
-TBD
+#### Keystore
+
+Ensure you have your intended deployment wallet imported as a keystore for Foundry.
+If not, create a new wallet using `cast`, and import it as a keystore.
+
+```bash
+cast wallet list
+cast wallet new
+cast wallet import [your_new_wallet]
+cast wallet address --account [your_new_wallet]
+```
+
+### Environment Variables
+
+Then, input your keystore name and wallet address in `.env`.
+In addition to this, include your RPC URL and Etherscan API key.
+
+```bash
+mv .env.example .env
+```
+
+Futhermore in `.env`, include deployment parameters.
+If you are unsure what the deployment parameters mean (or intend to do), refer to the `.env` comments and the NatSpec of [Bond's constructor](./src/Bond.sol).
+
+#### Deploy Script
+
+Finally, push a live deployment (or dryrun):
+
+```bash
+make script-deploy-live # OR
+make script-deploy-dry
+```

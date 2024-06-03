@@ -29,7 +29,7 @@ contract DeployBondDry is Script {
         test();
     }
 
-    function deploy() private broadcast returns (Bond bond) {
+    function deploy() private /* broadcast */ returns (Bond bond) {
         bond = new Bond(BENEFICIARY, BOND_PRICE, SHOULD_BURN_BONDS);
     }
 

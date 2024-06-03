@@ -1,4 +1,6 @@
-.PHONY: all update install build clean clean-git clean-coverage-report clean-lcov clean-slither clean-aderyn test-ext test coverage coverage-lcov slither aderyn script-deploy sudo-act
+-include .env
+
+.PHONY: all update install build clean clean-git clean-coverage-report clean-lcov clean-slither clean-aderyn test-ext test coverage coverage-lcov slither aderyn scopefile scope script-deploy-live script-deploy-dry sudo-act
 
 all: clean install build
 
@@ -46,7 +48,8 @@ scope :; tree ./src/ | sed 's/└/#/g; s/──/--/g; s/├/#/g; s/│ /|/g; s/�
 
 ### Deploy
 
-script-deploy :; forge script script/DeployBond.s.sol -vvvvv
+script-deploy-live :; forge script script/DeployBond.s.sol --rpc-url ${RPC_URL} --account ${ACCOUNT} --sender ${SENDER} --broadcast --etherscan-api-key ${ETHERSCAN_API_KEY} --verify -vvvvv
+script-deploy-dry :; forge script script/DeployBondDry.s.sol --rpc-url ${RPC_URL} --account ${ACCOUNT} --sender ${SENDER} -vvvvv 
 
 ### Local Workflows
 
