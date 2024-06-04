@@ -43,7 +43,7 @@ The usage of bonds is not specific, but, for example, can be used to whitelist w
 ## Installation
 
 ```bash
-git clone https://github.com/vile/eth-bonds
+git clone https://github.com/vile/eth-bonds.git
 cd eth-bonds
 make
 ```
