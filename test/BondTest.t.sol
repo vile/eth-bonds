@@ -26,6 +26,7 @@ contract BondTest is Test {
      */
 
     /// @dev Not used in deployment tests.
+    /// @notice Deploy a Bond contract.
     /// @param shouldBurnBonds Whether or not bonds should be burned when rejected.
     modifier deployBond(bool shouldBurnBonds) {
         uint8 burnBonds;
@@ -35,6 +36,8 @@ contract BondTest is Test {
         _;
     }
 
+    /// @notice Prank and purchase a single bond.
+    /// @param user The user to purchase a bond.
     modifier purchaseBond(address user) {
         vm.deal(user, BOND_PRICE);
         vm.prank(user);
@@ -42,6 +45,9 @@ contract BondTest is Test {
         _;
     }
 
+    /// @notice Prank and purchase bonds as two seperate users.
+    /// @param userOne The first user to purchase a bond.
+    /// @param userTwo The second user to purchase a bond.
     modifier purchaseBondMultiple(address userOne, address userTwo) {
         vm.deal(userOne, BOND_PRICE);
         vm.deal(userTwo, BOND_PRICE);
@@ -62,13 +68,13 @@ contract BondTest is Test {
      * ----------- Deployment Tests -----------
      */
 
-    /// @dev Should not be able to deploy with `_beneficiary` as the zero address.
+    /// @dev Assert not able to deploy with `_beneficiary` as the zero address.
     function test_deployWithBeneficiaryZero() public {
         vm.expectRevert(Bond.Bond__ZeroAddress.selector);
         bond = new Bond(ZERO_ADDRESS, BOND_PRICE, SHOULD_BURN_BONDS_TRUE);
     }
 
-    /// @dev Should not be able to deploy with `_bondPrice` as 0.
+    /// @dev Assert not able to deploy with `_bondPrice` as 0.
     function test_deployWithZeroBondPrice() public {
         uint256 zeroBondPrice = 0 ether;
         vm.expectRevert(Bond.Bond__InvalidBondPrice.selector);
@@ -76,7 +82,7 @@ contract BondTest is Test {
     }
 
     /// @dev [Fuzz]
-    /// @dev Should not be able to deploy with a `_shouldBurnBonds` number other than 1 or 2 (true or false).
+    /// @dev Assert not able to deploy with a `_shouldBurnBonds` number other than 1 or 2 (true or false).
     function test_deployWithBadBurnsNumber(uint8 shouldBurnBonds) public {
         vm.assume(shouldBurnBonds != SHOULD_BURN_BONDS_TRUE);
         vm.assume(shouldBurnBonds != SHOULD_BURN_BONDS_FALSE);
@@ -177,7 +183,7 @@ contract BondTest is Test {
         bond.buyBondOnBehalfOf{value: 0 ether}(USER_TWO);
     }
 
-    /// @dev Expect revert purchasing bond on behalf of  with wrong amount of ETH.
+    /// @dev Expect revert purchasing bond on behalf of with wrong amount of ETH.
     function test_userCantPurchaseMultipleBondsOnBehalfOf() public deployBond(true) {
         vm.deal(USER_ONE, BOND_PRICE * 2);
         vm.startPrank(USER_ONE);
@@ -303,7 +309,7 @@ contract BondTest is Test {
         bond.rejectBond(USER_ONE);
     }
 
-    /// @dev It is expect that the deployer will act properly and deploy with an acceptable `_beneficiary`, however:
+    /// @dev It is expected that the deployer will act properly and deploy with an acceptable `_beneficiary`, however:
     /// @dev Expect revert when attempting to reject a bond and send ETH to a bad beneficiary.
     function test_ownerRejectRevertWhenBadRecipient() public {
         vm.startPrank(OWNER);
@@ -346,6 +352,7 @@ contract BondTest is Test {
         assertFalse(bond.userHasBond(USER_TWO));
     }
 
+    /// @dev Assert that bonds can be rejected, and that ETH is burned.
     function test_ownerCanRejectBondAreBurned() public deployBond(true) purchaseBond(USER_ONE) {
         vm.startPrank(OWNER);
         uint256 activeBondsBefore = bond.getNumActiveBonds(); // 1
@@ -359,6 +366,7 @@ contract BondTest is Test {
         assertFalse(bond.userHasBond(USER_ONE));
     }
 
+    /// @dev Assert that a batch of bonds can be rejected, and that ETH is burned.
     function test_ownerCanRejectBatchBeneficiaryAreBurned()
         public
         deployBond(true)

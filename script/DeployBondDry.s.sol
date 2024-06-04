@@ -12,6 +12,7 @@ contract DeployBondDry is Script {
 
     Bond s_bond;
 
+    /// @dev Grab deployment params from .env.
     constructor() {
         BENEFICIARY = vm.envAddress("DEPLOY_BENEFICIARY");
         BOND_PRICE = vm.envUint("DEPLOY_BOND_PRICE");
